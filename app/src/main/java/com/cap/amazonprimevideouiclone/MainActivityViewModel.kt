@@ -22,19 +22,8 @@ class MainActivityViewModel : ViewModel() {
 
     fun onPagerItemSelected(pagerItem: PagerItem) {
 
-        val updatedList = arrayListOf<PagerItem>()
-
-        updatedList.addAll(_pagerItems.value ?: arrayListOf())
-
-        updatedList.forEach {
-            it.isSelected = pagerItem.pagerTitle.equals(it.pagerTitle, true)
-        }
-
-        _pagerItems.value = updatedList
-
-
         val list = arrayListOf(
-            PagerItem(pagerTitle = "Home", isSelected = true),
+            PagerItem(pagerTitle = "Home", isSelected = false),
             PagerItem(pagerTitle = "TVShows", isSelected = false),
             PagerItem(pagerTitle = "Movies", isSelected = false),
             PagerItem(pagerTitle = "Kids", isSelected = false),

@@ -15,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.unit.dp
 import com.cap.amazonprimevideouiclone.models.PagerItem
+import com.cap.amazonprimevideouiclone.ui.theme.FF8197A4
 
 
 @Composable
@@ -40,7 +41,7 @@ fun PagerTitle(modifier: Modifier = Modifier, mainActivityViewModel: MainActivit
 
                 Text(
                     text = item.pagerTitle,
-                    style = TextStyle(color = animateColorAsState(targetValue = if (item.isSelected) Color.White else Color.Gray).value),
+                    style = TextStyle(color = animateColorAsState(targetValue = if (item.isSelected) Color.White else FF8197A4).value),
                     modifier = Modifier.padding(8.dp)
                 )
 

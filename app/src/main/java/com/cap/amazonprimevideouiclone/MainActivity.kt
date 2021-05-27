@@ -8,14 +8,23 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import com.cap.amazonprimevideouiclone.ui.theme.AmazonPrimeVideoUICloneTheme
-import com.cap.amazonprimevideouiclone.ui.theme.MainThemeColor
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.cap.amazonprimevideouiclone.screens.DownloadsScreen
+import com.cap.amazonprimevideouiclone.screens.MyStuffScreen
+import com.cap.amazonprimevideouiclone.screens.HomeScreen
+import com.cap.amazonprimevideouiclone.screens.SearchScreen
+import com.cap.amazonprimevideouiclone.ui.theme.*
 
 
 class MainActivity : ComponentActivity() {
@@ -49,6 +58,16 @@ fun App(content: @Composable () -> Unit) {
 
 @Composable
 fun MainScreen(mainActivityViewModel: MainActivityViewModel) {
+
+    val navController = rememberNavController()
+
+    val screenList = listOf(
+        BottomBarScreens.HomeScreen,
+        BottomBarScreens.SearchScreen,
+        BottomBarScreens.DownloadsScreen,
+        BottomBarScreens.MyStuffScreen
+    )
+
     Scaffold(
         backgroundColor = MainThemeColor,
         topBar = {
@@ -57,57 +76,84 @@ fun MainScreen(mainActivityViewModel: MainActivityViewModel) {
             }
         },
         bottomBar = {
-            BottomAppBar(backgroundColor = Color.Black) {
-
-                BottomNavigation(backgroundColor = Color.Black) {
-
-                    BottomNavigationItem(
-                        selected = true,
-                        onClick = { /*TODO*/ },
-                        icon = { BottomBarItem(R.drawable.ic_outline_home_24) },
-                        label = { Text(text = "Home", style = TextStyle(color = Color.White)) }
-                    )
-
-                    BottomNavigationItem(
-                        selected = true,
-                        onClick = { /*TODO*/ },
-                        icon = { BottomBarItem(R.drawable.ic_baseline_search_24) },
-                        label = { Text(text = "Search", style = TextStyle(color = Color.White)) }
-                    )
-
-                    BottomNavigationItem(
-                        selected = true,
-                        onClick = { /*TODO*/ },
-                        icon = { BottomBarItem(R.drawable.ic_baseline_arrow_circle_down_24) },
-                        label = { Text(text = "Downloads", style = TextStyle(color = Color.White)) }
-                    )
-
-                    BottomNavigationItem(
-                        selected = true,
-                        onClick = { /*TODO*/ },
-                        icon = { BottomBarItem(R.drawable.ic_baseline_perm_identity_24) },
-                        label = { Text(text = "My Stuff", style = TextStyle(color = Color.White)) }
-                    )
-                }
-            }
+            BottomBarItem(navController = navController, items = screenList)
         }
     ) {
 
-        Column {
-            PagerTitle(mainActivityViewModel = mainActivityViewModel)
+        NavHost(navController, startDestination = BottomBarScreens.HomeScreen.routeName) {
+
+            composable(BottomBarScreens.HomeScreen.routeName) {
+                HomeScreen(mainActivityViewModel = mainActivityViewModel)
+            }
+
+            composable(BottomBarScreens.SearchScreen.routeName) {
+                SearchScreen()
+            }
+
+            composable(BottomBarScreens.DownloadsScreen.routeName) {
+                DownloadsScreen()
+            }
+
+            composable(BottomBarScreens.MyStuffScreen.routeName) {
+                MyStuffScreen()
+            }
         }
 
     }
 }
 
 @Composable
-fun BottomBarItem(imageId: Int) {
+fun BottomBarItem(navController: NavController, items: List<BottomBarScreens>) {
 
-    Image(
-        painter = painterResource(imageId),
-        contentDescription = "",
+    BottomNavigation(
+        backgroundColor = Color.Black
+    ) {
+
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentRoute = navBackStackEntry?.destination?.route
+
+        items.forEach {
+            BottomNavigationItem(
+                icon = {
+                    Icon(
+                        painter = painterResource(id = it.bottomBarIcon),
+                        contentDescription = null,
+                        tint = if (currentRoute == it.routeName) FF00A8E1 else B3F3F4F6
+                    )
+                },
+                label = {
+                    if (currentRoute == it.routeName) {
+                        SelectedText(title = it.bottomBarTitle)
+                    } else {
+                        NonSelectedTest(title = it.bottomBarTitle)
+                    }
+                },
+                selected = currentRoute == it.routeName,
+                alwaysShowLabel = true,
+                onClick = {
+                    if (currentRoute != it.routeName) {
+                        navController.navigate(it.routeName)
+                    }
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun SelectedText(title: Int) {
+    Text(
+        text = stringResource(id = title),
+        style = TextStyle(color = FF00A8E1)
     )
+}
 
+@Composable
+fun NonSelectedTest(title: Int) {
+    Text(
+        text = stringResource(id = title),
+        style = TextStyle(color = B3F3F4F6)
+    )
 }
 
 @Composable
