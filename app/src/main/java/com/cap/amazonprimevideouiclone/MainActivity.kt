@@ -14,7 +14,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -25,8 +27,10 @@ import com.cap.amazonprimevideouiclone.screens.MyStuffScreen
 import com.cap.amazonprimevideouiclone.screens.HomeScreen
 import com.cap.amazonprimevideouiclone.screens.SearchScreen
 import com.cap.amazonprimevideouiclone.ui.theme.*
+import com.google.accompanist.pager.ExperimentalPagerApi
 
 
+@ExperimentalPagerApi
 class MainActivity : ComponentActivity() {
 
     private val mainActivityViewModel by viewModels<MainActivityViewModel>()
@@ -50,12 +54,12 @@ fun App(content: @Composable () -> Unit) {
     /*rememberSystemUiController().setSystemBarsColor(
         color = Color.Black
     )*/
-
     AmazonPrimeVideoUICloneTheme {
         content()
     }
 }
 
+@ExperimentalPagerApi
 @Composable
 fun MainScreen(mainActivityViewModel: MainActivityViewModel) {
 
@@ -68,15 +72,27 @@ fun MainScreen(mainActivityViewModel: MainActivityViewModel) {
         BottomBarScreens.MyStuffScreen
     )
 
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+
+    val currentRoute = navBackStackEntry?.destination?.route
+
     Scaffold(
         backgroundColor = MainThemeColor,
         topBar = {
-            TopAppBar(backgroundColor = MainThemeColor) {
-                TopAppBar()
+            if (currentRoute == BottomBarScreens.HomeScreen.routeName) {
+                TopAppBar(backgroundColor = MainThemeColor) {
+                    if (currentRoute == BottomBarScreens.HomeScreen.routeName) {
+                        ImageTopAppBar()
+                    }
+                }
             }
         },
         bottomBar = {
-            BottomBarItem(navController = navController, items = screenList)
+            BottomBarItem(
+                navController = navController,
+                items = screenList,
+                currentRoute = currentRoute
+            )
         }
     ) {
 
@@ -103,14 +119,15 @@ fun MainScreen(mainActivityViewModel: MainActivityViewModel) {
 }
 
 @Composable
-fun BottomBarItem(navController: NavController, items: List<BottomBarScreens>) {
+fun BottomBarItem(
+    navController: NavController,
+    items: List<BottomBarScreens>,
+    currentRoute: String?
+) {
 
     BottomNavigation(
         backgroundColor = Color.Black
     ) {
-
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
 
         items.forEach {
             BottomNavigationItem(
@@ -122,11 +139,14 @@ fun BottomBarItem(navController: NavController, items: List<BottomBarScreens>) {
                     )
                 },
                 label = {
-                    if (currentRoute == it.routeName) {
-                        SelectedText(title = it.bottomBarTitle)
-                    } else {
-                        NonSelectedTest(title = it.bottomBarTitle)
-                    }
+                    Text(
+                        text = stringResource(it.bottomBarTitle),
+                        style = TextStyle(color = if (currentRoute == it.routeName) FF00A8E1 else B3F3F4F6),
+                        fontSize = 10.sp,
+                        fontFamily = bookerly,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
+                    )
                 },
                 selected = currentRoute == it.routeName,
                 alwaysShowLabel = true,
@@ -141,23 +161,7 @@ fun BottomBarItem(navController: NavController, items: List<BottomBarScreens>) {
 }
 
 @Composable
-fun SelectedText(title: Int) {
-    Text(
-        text = stringResource(id = title),
-        style = TextStyle(color = FF00A8E1)
-    )
-}
-
-@Composable
-fun NonSelectedTest(title: Int) {
-    Text(
-        text = stringResource(id = title),
-        style = TextStyle(color = B3F3F4F6)
-    )
-}
-
-@Composable
-fun TopAppBar() {
+fun ImageTopAppBar() {
     Row(
         Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
@@ -171,4 +175,3 @@ fun TopAppBar() {
         )
     }
 }
-

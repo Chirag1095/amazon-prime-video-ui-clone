@@ -13,9 +13,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.cap.amazonprimevideouiclone.models.PagerItem
 import com.cap.amazonprimevideouiclone.ui.theme.FF8197A4
+import com.cap.amazonprimevideouiclone.ui.theme.bookerly
 
 
 @Composable
@@ -42,7 +49,10 @@ fun PagerTitle(modifier: Modifier = Modifier, mainActivityViewModel: MainActivit
                 Text(
                     text = item.pagerTitle,
                     style = TextStyle(color = animateColorAsState(targetValue = if (item.isSelected) Color.White else FF8197A4).value),
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier.padding(8.dp),
+                    fontFamily = bookerly,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 12.sp
                 )
 
                 Divider(
@@ -58,4 +68,39 @@ fun PagerTitle(modifier: Modifier = Modifier, mainActivityViewModel: MainActivit
             }
         }
     }
+}
+
+
+@Composable
+fun RadialGradient(colors: ArrayList<Color>) {
+    Box(
+        Modifier
+            .fillMaxSize()
+            .background(
+                brush = Brush.radialGradient(
+                    center = Offset(0F, 0F),
+                    radius = 800F,
+                    colors = colors
+                )
+            )
+    ) {
+
+    }
+}
+
+
+@Composable
+fun ToolbarTitle(title: String) {
+
+    Text(
+        text = title,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        style = TextStyle(color = Color.White),
+        fontFamily = bookerly,
+        fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Center,
+        fontSize = 16.sp
+    )
 }

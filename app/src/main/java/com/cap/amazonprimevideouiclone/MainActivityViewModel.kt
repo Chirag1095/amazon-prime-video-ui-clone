@@ -14,7 +14,7 @@ class MainActivityViewModel : ViewModel() {
     init {
         _pagerItems.value = arrayListOf(
             PagerItem(pagerTitle = "Home", isSelected = true),
-            PagerItem(pagerTitle = "TVShows", isSelected = false),
+            PagerItem(pagerTitle = "TV Shows", isSelected = false),
             PagerItem(pagerTitle = "Movies", isSelected = false),
             PagerItem(pagerTitle = "Kids", isSelected = false),
         )
@@ -24,7 +24,7 @@ class MainActivityViewModel : ViewModel() {
 
         val list = arrayListOf(
             PagerItem(pagerTitle = "Home", isSelected = false),
-            PagerItem(pagerTitle = "TVShows", isSelected = false),
+            PagerItem(pagerTitle = "TV Shows", isSelected = false),
             PagerItem(pagerTitle = "Movies", isSelected = false),
             PagerItem(pagerTitle = "Kids", isSelected = false),
         )
