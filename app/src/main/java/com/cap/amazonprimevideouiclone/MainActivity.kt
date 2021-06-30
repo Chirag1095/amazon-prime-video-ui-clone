@@ -96,7 +96,7 @@ fun MainScreen(mainActivityViewModel: MainActivityViewModel) {
         }
     ) {
 
-        NavHost(navController, startDestination = BottomBarScreens.HomeScreen.routeName) {
+        NavHost(navController, startDestination = BottomBarScreens.SearchScreen.routeName) {
 
             composable(BottomBarScreens.HomeScreen.routeName) {
                 HomeScreen(mainActivityViewModel = mainActivityViewModel)

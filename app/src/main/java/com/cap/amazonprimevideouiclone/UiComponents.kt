@@ -1,11 +1,14 @@
 package com.cap.amazonprimevideouiclone
 
+import android.widget.SearchView
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,14 +18,14 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cap.amazonprimevideouiclone.models.PagerItem
-import com.cap.amazonprimevideouiclone.ui.theme.FF8197A4
-import com.cap.amazonprimevideouiclone.ui.theme.bookerly
+import com.cap.amazonprimevideouiclone.ui.theme.*
 
 
 @Composable
@@ -88,7 +91,6 @@ fun RadialGradient(colors: ArrayList<Color>) {
     }
 }
 
-
 @Composable
 fun ToolbarTitle(title: String) {
 
@@ -103,4 +105,42 @@ fun ToolbarTitle(title: String) {
         textAlign = TextAlign.Center,
         fontSize = 16.sp
     )
+}
+
+
+@Composable
+fun SearchView(modifier: Modifier = Modifier) {
+
+    var text by remember {
+        mutableStateOf("")
+    }
+
+    TextField(
+        modifier = modifier.fillMaxWidth(),
+        value = text,
+        onValueChange = { text = it },
+        label = {
+            Text(
+                text = "Search by actor, title....",
+                style = TextStyle(color = B3F3F4F6)
+            )
+        },
+        shape = RoundedCornerShape(4.dp),
+        trailingIcon = {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_baseline_mic_24),
+                contentDescription = null,
+                tint = B3F3F4F6
+            )
+        },
+        leadingIcon = {
+            Icon(Icons.Default.Search, contentDescription = null, tint = B3F3F4F6)
+        },
+        colors = TextFieldDefaults.textFieldColors(
+            backgroundColor = MainThemeColor.copy(alpha = 0.9F),
+            textColor = FF8197A4
+        )
+
+    )
+
 }
